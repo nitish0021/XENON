@@ -1,0 +1,30 @@
+- name: Create a new Demo EC2 instance
+  hosts: localhost
+  gather_facts: False
+
+  vars:
+      region: ap-south-1
+      instance_type: t2.micro
+      ami: ami-0756fbca465a59a30  # Ubuntu 16.04 LTS
+      keypair: xenon # pem file name
+
+  tasks:
+
+    - name: Create an ec2 instance
+      ec2:
+         aws_access_key: 'AKIAUU3EBV2JZOCRNFNK'
+         aws_secret_key: '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'
+         key_name: "{{ keypair }}"
+         group: default  # security group name
+         instance_type: "{{ instance_type}}"
+         image: "{{ ami }}"
+         wait: true
+         region: "{{ region }}"
+         count: 1  # default
+         count_tag:
+            Name: Xenon_instance
+         instance_tags:
+            Name: Xenon_test
+         vpc_subnet_id: subnet-ebe7b0c5
+         assign_public_ip: yes
+      register: ec2
